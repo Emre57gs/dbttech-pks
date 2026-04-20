@@ -1,6 +1,7 @@
 package de.htwberlin.dbtech.aufgaben.ue02;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -30,7 +31,11 @@ public class CoolingJdbc implements ICoolingJdbc {
     public List<String> getSampleKinds() {
         L.info("getSampleKinds: start");
         // TODO Auto-generated method stub
-        return null;
+        List<String> simpleKind = null;
+        String sql = "select * from  samplekind order by text asc";
+
+
+        return simpleKind;
     }
 
     @Override
