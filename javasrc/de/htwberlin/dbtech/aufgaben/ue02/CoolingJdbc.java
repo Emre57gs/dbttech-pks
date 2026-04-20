@@ -37,15 +37,17 @@ public class CoolingJdbc implements ICoolingJdbc {
         // TODO Auto-generated method stub
         List<String> sampleKind = null;
         String sql = "select * from  samplekind order by text asc"; // SQL
-
         PreparedStatement p = null; // Connection
         ResultSet rs = null;
-        sampleKind = new LinkedList<String>(); // Liste initialisiert
-
 
         try {
+            sampleKind = new LinkedList<String>(); // Liste initialisiert
             p = useConnection().prepareStatement(sql);
             rs = p.executeQuery();
+
+            while (rs.next()) {
+                sampleKind.add(rs.getString("text"));
+            }
         } catch (SQLException e){
             throw new DataException(e);
 
