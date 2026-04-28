@@ -30,13 +30,13 @@ public class CoolingJdbc implements ICoolingJdbc {
         }
         return connection;
     }
-
+    // 20.04.26 in der Übung gemacht
     @Override
     public List<String> getSampleKinds() {
         L.info("getSampleKinds: start");
         // TODO Auto-generated method stub
         List<String> sampleKind = null;
-        String sql = "select * from  samplekind order by text asc"; // SQL
+        String sql = "select * from  samplekind order by text asc"; // SQL, kein Semikohlon
         PreparedStatement p = null; // Connection
         ResultSet rs = null;
 
@@ -76,5 +76,7 @@ public class CoolingJdbc implements ICoolingJdbc {
         // TODO Auto-generated method stub
 
     }
-
+    public boolean chickID (String table, Integer id) { // eventuell hilfsmethode bauen
+        return true;
+    }
 }
