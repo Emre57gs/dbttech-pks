@@ -147,6 +147,51 @@ public class CoolingJdbc implements ICoolingJdbc {
     public void clearTray(Integer trayId) {
         L.info("clearTray: trayId: " + trayId);
         // TODO Auto-generated method stub
+        String checkTraySql = "SELECT * FROM Tray WHERE TrayID = ?";
+        String selectSamplesSql = "SELECT SampleID FROM Place WHERE TrayID = ?";
+        String deletePlacesSql = "DELETE FROM Place WHERE TrayID = ?";
+        String deleteSampleSql = "DELETE FROM Sample WHERE SampleID = ?";
+
+        try {
+            // Prüfen, ob das Tray existiert
+            PreparedStatement p = useConnection().prepareStatement(checkTraySql);
+            p.setInt(1, trayId);
+            ResultSet rs = p.executeQuery();
+
+            // Wenn kein Tray gefunden wurde → Fehler
+            if (!rs.next()) {
+                throw new CoolingSystemException("Tray does not exist");
+            }
+
+            // Alle SampleIDs holen, die auf diesem Tray liegen (über Place)
+            p = useConnection().prepareStatement(selectSamplesSql);
+            p.setInt(1, trayId);
+            rs = p.executeQuery();
+
+            // Liste speichern, weil wir sie nachher noch brauchen
+            List<Integer> sampleIds = new ArrayList<Integer>();
+
+            while (rs.next()) {
+                sampleIds.add(rs.getInt("SampleID"));
+            }
+
+            // Zuerst alle Plätze des Tabletts löschen
+            // (sonst verhindern Fremdschlüssel das Löschen der Samples)
+            p = useConnection().prepareStatement(deletePlacesSql);
+            p.setInt(1, trayId);
+            p.executeUpdate();
+
+            // Danach alle zugehörigen Samples löschen
+            for (Integer sampleId : sampleIds) {
+                p = useConnection().prepareStatement(deleteSampleSql);
+                p.setInt(1, sampleId);
+                p.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            // SQL-Fehler in unsere eigene Exception umwandeln
+            throw new CoolingSystemException(e);
+        }
 
     }
     public boolean chickID (String table, Integer id) { // eventuell hilfsmethode bauen
