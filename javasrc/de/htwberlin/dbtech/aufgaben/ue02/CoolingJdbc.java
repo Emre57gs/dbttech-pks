@@ -194,7 +194,7 @@ public class CoolingJdbc implements ICoolingJdbc {
         }
 
     }
-    public boolean chickID (String table, Integer id) { // eventuell hilfsmethode bauen
+   /* public boolean checkID (String table, Integer id) {
         return true;
-    }
+    } // Vorschlag/Hinweise für eine Hilfsmethode die man erstellen könnte **/
 }
