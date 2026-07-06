@@ -33,21 +33,21 @@ public class CoolingService implements ICoolingService {
     public void transferSample(Integer sampleId, Integer diameterInCM) {
         L.info("transferSample: sampleId: " + sampleId + ", diameterInCM: " + diameterInCM);
 
-        // 1. Probe suchen, wenn es sie nicht gibt, ist die Aufgabe nicht lösbar
+        // 1. Ablaufdatum der Probe wird gesucht, wenn null -> existiert die Probe nicht
         Date sampleExpirationDate = findSampleExpirationDate(sampleId);
         if (sampleExpirationDate == null) {
             throw new CoolingSystemException();
         }
 
-        // 2. Erst ein passendes, schon benutzbares Tablett suchen
+        // 2. Erst ein passendes, schon benutzbares Tablett suchen (Der Durchmesser passt)
         TrayData tray = findTrayForSample(diameterInCM, sampleExpirationDate);
 
-        // 3. Wenn keines passt, ein leeres Tablett nehmen und Ablaufdatum setzen
+        // 3. Wenn keines passt, ein leeres Tablett nehmen (kein Eintrag in place) und Ablaufdatum setzen
         if (tray == null) {
             tray = findEmptyTray(diameterInCM);
             if (tray == null) {
                 throw new CoolingSystemException();
-            }
+            } //Ablaufdatum der Probe plus 30 Tage
             updateTrayExpirationDate(tray.trayId, Date.valueOf(sampleExpirationDate.toLocalDate().plusDays(30)));
         }
 
@@ -56,7 +56,7 @@ public class CoolingService implements ICoolingService {
         if (placeNo == null) {
             throw new CoolingSystemException();
         }
-
+        // Probe wird eingelagert, also ein Datensatz in Place eingefügt
         insertPlace(tray.trayId, placeNo, sampleId);
     }
 
