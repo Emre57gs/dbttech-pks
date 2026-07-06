@@ -263,7 +263,7 @@ public class CoolingService implements ICoolingService {
     /**
      * Kleine Hilfsklasse, um TrayID und Capacity gemeinsam zurückzugeben
      *
-     * Begründung: Java-Methoden können nur einen Wert zurückgeben
+     * Begründung Java-Methoden können nur einen Wert zurückgeben
      * deshalb werden die zwei
      * zusammengehörenden Werte in dieses Objekt gepackt
      */
