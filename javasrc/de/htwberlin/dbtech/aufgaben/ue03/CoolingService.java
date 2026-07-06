@@ -194,7 +194,7 @@ public class CoolingService implements ICoolingService {
         // Index 0 wird nicht benutzt, weil PlaceNo bei 1 beginnt
         boolean[] usedPlaces = new boolean[capacity + 1];
 
-        // Alle belegten Plaetze dieses Tabletts aus der Datenbank lesen
+        // Alle belegten Plätze dieses Tabletts aus der Datenbank lesen
         String sql = "select PlaceNo from Place where TrayID = ?";
         try (PreparedStatement pStmt = useConnection().prepareStatement(sql)) {
             pStmt.setInt(1, trayId);
@@ -202,7 +202,7 @@ public class CoolingService implements ICoolingService {
                 while (rs.next()) {
                     int placeNo = rs.getInt("PlaceNo");
 
-                    // Nur gueltige Platznummern innerhalb der Kapazität markieren
+                    // Nur gültige Platznummern innerhalb der Kapazität markieren
                     if (placeNo >= 1 && placeNo <= capacity) {
                         usedPlaces[placeNo] = true;
                     }
@@ -234,7 +234,7 @@ public class CoolingService implements ICoolingService {
             // Neues Ablaufdatum eintragen
             pStmt.setDate(1, expirationDate);
 
-            // Bestimmen, welches Tablett geaendert wird
+            // Bestimmen, welches Tablett geändert wird
             pStmt.setInt(2, trayId);
             pStmt.executeUpdate();
         } catch (SQLException e) {
@@ -245,8 +245,8 @@ public class CoolingService implements ICoolingService {
     /**
      * Lagert die Probe technisch ein
      *
-     * Dafuer wird ein Datensatz in Place erzeugt:
-     * Auf welchem Tablett, auf welchem Platz, welche Probe
+     * Dafür wird ein Datensatz in Place erzeugt:
+     * auf welchem Tablett, auf welchem Platz, welche Probe
      */
     private void insertPlace(Integer trayId, Integer placeNo, Integer sampleId) {
         String sql = "insert into Place (TrayID, PlaceNo, SampleID) values (?, ?, ?)";
